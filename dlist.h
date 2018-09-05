@@ -1,61 +1,106 @@
 #ifndef DLIST_H
 #define DLIST_H
 
+#include <iostream>
 #include "iterator.h"
-
+using namespace std;
 template <typename T>
-class DListIterator : public Iterator<T> {     
-    public: 
-        DListIterator() : Iterator<T>() {};
-        DListIterator(Node<T> *current) : Iterator<T>(current) {};
-        DListIterator<T> operator++();
-        DListIterator<T> operator--();
+class DListIterator : public Iterator<T> {
+public:
+    DListIterator() : Iterator<T>() {};
+    DListIterator(Node<T> *current) : Iterator<T>(current) {};
+    DListIterator<T> operator++();
+    DListIterator<T> operator--();
 };
 
 template <typename Tr>
-class DList {     
-    public:
-        typedef typename Tr::T T;
-        typedef DListIterator<T> iterator;
-      
-    private:
-        Node<T>* head;
-        Node<T>* tail;
-              
-    public:
-        DList() {
-            head = tail = nullptr;
-        };
+class DList {
+public:
+    typedef typename Tr::T T;
+    typedef DListIterator<T> iterator;
 
-        void push_front(T data) {
-            // TODO
-        }
+private:
+    Node<T>* head;
+    Node<T>* tail;
 
-        void push_back(T data) {
-            // TODO
+public:
+    int nodes=0;
+
+    DList()
+    {
+        head = tail = nullptr;
+    };
+
+    void push_front(T data)
+    {
+        auto* temp = new Node<T>(data);
+        if(nodes==0)
+            head=tail=temp;
+        else
+        {
+            head->prev=temp;
+            temp->next=head;
+            head=temp;
         }
-             
-        void pop_front() {
-            // TODO
+        nodes++;
+    }
+
+    void push_back(T data)
+    {
+        auto* temp = new Node<T>(data);
+        if(nodes==0)
+            head=tail=temp;
+        else
+        {
+            tail->next=temp;
+            temp->prev=tail;
+            tail=temp;
         }
-             
-        void pop_back() {
-            // TODO
+        nodes++;
+    }
+
+    void pop_front()
+    {
+        auto* temp = head;
+        if(nodes==0)
+            cout << "Lista vacia\n";
+        else
+        {
+            temp->next->prev=nullptr;
+            head=temp->next;
+            delete temp;
         }
-             
-        iterator begin() {
-            // TODO
+        nodes--;
+    }
+
+    void pop_back() {
+        // TODO
+    }
+
+    iterator begin() {
+        // TODO
+    }
+
+    iterator end() {
+        // TODO
+    }
+
+    void print()
+    {
+        auto temp = head;
+        for(int i=0; i<nodes; i++)
+        {
+            cout << temp->data << " ";
+            temp=temp->next;
         }
-             
-        iterator end() {
-            // TODO
+        cout << endl;
+    }
+
+    ~DList() {
+        if (head) {
+            head->killSelf();
         }
-             
-        ~DList() {
-            if (head) {
-                head->killSelf();
-            } 
-        }         
+    }
 };
 
 #endif
