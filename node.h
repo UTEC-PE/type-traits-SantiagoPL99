@@ -1,3 +1,4 @@
+
 #ifndef NODE_H
 #define NODE_H
 
@@ -6,11 +7,11 @@ struct Node {
     T data;
     Node<T>* next;
     Node<T>* prev;
-      
+
     Node(T data) : data(data) {
         next = prev = nullptr;
     };
-      
+
     void killSelf();
 };
 
@@ -19,7 +20,7 @@ void Node<T>::killSelf() {
     if (next) {
         next->killSelf();
     }
-    
+
     delete this;
 }
 

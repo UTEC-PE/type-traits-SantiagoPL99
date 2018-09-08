@@ -9,12 +9,21 @@ class DListIterator : public Iterator<T> {
 public:
     DListIterator() : Iterator<T>() {};
     DListIterator(Node<T> *current) : Iterator<T>(current) {};
-    DListIterator<T> operator++();
-    DListIterator<T> operator--();
+    DListIterator<T> operator++()
+    {
+        this->current = this->current->next;
+        return *this;
+    };
+    DListIterator<T> operator--()
+    {
+        this->current = this->current->prev;
+        return *this;
+    };
 };
 
 template <typename Tr>
-class DList {
+class DList
+{
 public:
     typedef typename Tr::T T;
     typedef DListIterator<T> iterator;
@@ -73,16 +82,28 @@ public:
         nodes--;
     }
 
-    void pop_back() {
-        // TODO
+    void pop_back()
+    {
+        auto* temp = tail;
+        if(nodes==0)
+            cout << "Lista vacia\n";
+        else
+        {
+            tail->prev->next=nullptr;
+            tail=tail->prev;
+            delete temp;
+        }
+        nodes--;
     }
 
-    iterator begin() {
-        // TODO
+    iterator begin()
+    {
+        return iterator(head);
     }
 
-    iterator end() {
-        // TODO
+    iterator end()
+    {
+        return iterator(tail);
     }
 
     void print()
@@ -96,8 +117,10 @@ public:
         cout << endl;
     }
 
-    ~DList() {
-        if (head) {
+    ~DList()
+    {
+        if(head)
+        {
             head->killSelf();
         }
     }
